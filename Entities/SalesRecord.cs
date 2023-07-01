@@ -7,9 +7,9 @@ namespace sales_analysis.Entities
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int sales_id { get; set; }
-        [ForeignKey("location_id")]
         public int location_id { get; set; }
-        public Location location { get; set; }
+        [ForeignKey("location_id")]
+        public virtual Location location { get; set; }
         public string product_name { get; set; }
         public int price
         {

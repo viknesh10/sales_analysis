@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using sales_analysis.Entities;
+using sales_analysis.Entities.Data;
 
 namespace sales_analysis.Context
 {
@@ -14,7 +15,7 @@ namespace sales_analysis.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.DataSeed();
+            modelBuilder.DataSeed();
         }
     }
 }
