@@ -1,8 +1,93 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-}
+    ViewData["Title"] = "Dashboard";
+    @model GroupedBarChartViewModel;
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2>Key Points - (11/06/2023 - 17/06/2023)</h2>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Total Sales Amount</h4>
+                        <b>₹ @ViewBag.TotalSales.total_sales_amount</b>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Top Sold Model</h4>
+                        <h5>Model Name - <span>@ViewBag.TopProduct.product_model</span></h5>
+                        <p>Total Sales Amount - <b>₹ @ViewBag.TopProduct.total_sales_amount</b></p>
+                    </div>
+                    <div class="col-sm-6">
+                        <h4>Least Sold Model</h4>
+                        <h5>Model Name - <span>@ViewBag.BottomProduct.product_model</span></h5>
+                        <p>Total Sales Amount - <b>₹ @ViewBag.BottomProduct.total_sales_amount</b></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+@for (int i = 0; i < ViewBag.TopModels.Count; i += 2)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4>Top Model - @ViewBag.TopModels[i].location</h4>
+                            <h5> Model Name - <span>@ViewBag.TopModels[i].product_model</span></h5>
+                            <p>Total Sales Amount - <b>₹ @ViewBag.TopModels[i].total_sales_amount</b></p>
+                        </div>
+                        @if (i + 1 < ViewBag.TopModels.Count)
+                        {
+                            <div class="col-md-6">
+                                <h4>Top Model - @ViewBag.TopModels[i + 1].location</h4>
+                                <h5> Model Name - <span>@ViewBag.TopModels[i + 1].product_model</span></h5>
+                                <p>Total Sales Amount - <b>₹ @ViewBag.TopModels[i + 1].total_sales_amount</b></p>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h2>Total Sales</h2>
+                <canvas id="groupedBarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var chartData = {
+        labels: @Html.Raw(Json.Serialize(Model.Labels)),
+        datasets: @Html.Raw(Json.Serialize(Model.Datasets))
+                };
+    var ctx = document.getElementById('groupedBarChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: chartData,
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    stacked: true
+                },
+                y: {
+                    stacked: true
+                }
+            }
+        }
+    });
+</script>
